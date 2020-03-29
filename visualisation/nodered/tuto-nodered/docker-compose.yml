@@ -1,0 +1,66 @@
+# Copyright (C) CampusIoT,  - All Rights Reserved
+# Written by CampusIoT Dev Team, 2016-2018
+
+version: "2"
+
+services:
+
+  nodered:
+    extends:
+      file: nodered.yml
+      service: nodered
+    links:
+      - influxdb:influxdb
+#      - opentsdb:opentsdb
+#      - mongodb:mongodb
+
+  influxdb:
+    extends:
+      file: influxdb.yml
+      service: influxdb
+
+#  mongodb:
+#    extends:
+#      file: mongodb.yml
+#      service: mongodb
+
+#  opentsdb:
+#    extends:
+#      file: opentsdb.yml
+#      service: opentsdb
+
+# http://docs.grafana.org/installation/docker/
+  grafana:
+    extends:
+      file: grafana.yml
+      service: grafana
+    links:
+      - influxdb:influxdb
+#      - mongodb:mongodb
+#      - opentsdb:opentsdb
+
+#  chronograf:
+#    extends:
+#      file: chronograf.yml
+#      service: chronograf
+#    links:
+#      - influxdb:influxdb
+
+#  kapacitor:
+#    extends:
+#      file: kapacitor.yml
+#      service: kapacitor
+#    links:
+#      - influxdb:influxdb
+
+#  alerta:
+#    extends:
+#      file: alerta.yml
+#      service: alerta
+#    links:
+#      - postgresdb:postgresdb
+
+#  postgresdb:
+#    extends:
+#      file: alerta.yml
+#      service: postgresdb
