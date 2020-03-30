@@ -1874,6 +1874,7 @@
         "name": "Application Rx",
         "topic": "application/+/device/+/rx",
         "qos": "2",
+        "datatype": "auto",
         "broker": "f75893bf.fe0438",
         "x": 220,
         "y": 100,
