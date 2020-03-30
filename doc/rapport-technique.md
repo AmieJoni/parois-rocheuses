@@ -1,8 +1,8 @@
-#Introduction
+# Introduction
 Ce Rapport technique présente les outils utilisés ainsi que la démarche suivie pour la réalisation de ce projet,
 ce dernier a pour but d'envoyer la mesure faite par notre dispositif de la distance des parois rocheuses par le biais du réseau LoraWan.
 
-#outils
+# Outils
 Dans cette partie on va présenter les outils qu'on a utilisés.
 
 ## STM32 IoTNode B-L475E-IOT01A
@@ -21,10 +21,10 @@ InfluxDB est un système de gestion de base de données orientée séries chrono
 ## Grafana
 Grafana est un logiciel libre qui permet la visualisation de données.
 
-#Démarche
+# Démarche
 Dans cette partie on va vous montrer la démarche qu'on a suivie pour réaliser le projet.
 
-##Aquisition de la mesurer
+## Aquisition de la mesurer
 Pour l'acquisition de la mesure on on utilise la librairie vl53l0x, elle nous permet d'interagir avec le capteur et connaître son état de prise de la mesure.
   uint32_t distance;
     int status;
@@ -36,7 +36,7 @@ Pour l'acquisition de la mesure on on utilise la librairie vl53l0x, elle nous pe
     Serial.println(distance);
 On obtiendra la mesure dans la variable "distance" qui a une taille de 32 bits, la mesure en question représente la distance en millimètres.
 
-##Transformation de la mesure
+## Transformation de la mesure
 Pour envoyer la mesure dans le réseau la contrainte est d'envoyer byte/byte. Notre mesure est prise dans une taille de 4 bytes (32 bits) il faut la divisée.
   for(int i=0; i<4; i++) {
     if(i != 0){
@@ -48,14 +48,14 @@ Pour envoyer la mesure dans le réseau la contrainte est d'envoyer byte/byte. No
 Dans une boucle en utilisant les opérateurs binaires on fait une rotation à droite de 8 bits pour ramener les bits les plus significatifs puis un 'ET' logique avec la valeur 255 pour en garder la valeur des 8 premiers bits seulement.
 Finalement on stocke les bytes dans un tableau de caractère.
 
-##Envoi de la mesure
+## Envoi de la mesure
 Pour l'envoi de la mesure dans le réseau on a créé une application et à l'intérieur de celle-ci on a ajouté le notre périphérique d'envoi.
 
-###Enregistrement
+### Enregistrement
 Un équipement réseau doit être enregistré dans un seul réseau LoRaWAN seulement, un équipement est identifié par son DevUEI
 c'est comme l'adresse MAC d'un ordinateur il est unique et propre au matériel.
 
-###Envoi
+### Envoi
 On utilisera la librairie 'LoRaWANNode' pour contrôler la carte réseau LoRaWAN à notre disposition.
 L'envoi des données dans le réseau passe par 3 étapes:
 - Etape 1: Préparation du module
@@ -83,7 +83,7 @@ L'envoi des données dans le réseau passe par 3 étapes:
       Serial.println("Frame sent");
     }
 
-###Decodage
+### Decodage
 Dans le serveur LoRaWAN on doit mettre en place une fonction javascript pour décoder les bytes reçus, parce que celui qui reçois les bytes ne sait pas ce qu'elles présentent.
 
 - C'est la fonction de décodage qui reçoit les bytes.
@@ -105,6 +105,6 @@ Dans le serveur LoRaWAN on doit mettre en place une fonction javascript pour dé
         (buf[offset + 3] * 0x1000000);
   }
 
-##Visualisation
+## Visualisation
 Dans cette partie c'est plus comment récupérer les mesures des capteurs gérés par la plateforme CampusIoT afin de les archiver et de les visualiser en temps réel au moyen de la stack NodeRED, InfluxDB, Grafana.
 Puisque c'est plutôt de la configuration, cette partie sera expliquée dans la vidéo qui accompagnera se rapport.
